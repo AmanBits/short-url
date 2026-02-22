@@ -103,26 +103,27 @@
   </div>
 
   <script>
-    function shortenUrl() {
-      const longUrl = document.getElementById("longUrl").value;
-      if (!longUrl) {
-        alert("Please enter a URL");
-        return;
-      }
+async function shortenUrl() {
+  const longUrl = document.getElementById("longUrl").value;
+  if (!longUrl) {
+    alert("Please enter a URL");
+    return;
+  }
 
-      // TEMP demo short link (replace later with backend API)
-      const randomCode = Math.random().toString(36).substring(2, 7);
-      const shortLink = "https://neurix.pages.dev/" + randomCode;
+  const res = await fetch("https://api.neurix.com/shorten", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ longUrl })
+  });
 
-      const resultDiv = document.getElementById("result");
-      const shortUrlEl = document.getElementById("shortUrl");
+  const data = await res.json();
 
-      shortUrlEl.href = shortLink;
-      shortUrlEl.textContent = shortLink;
+  const shortLink = "https://short.neurix.com/" + data.code;
 
-      resultDiv.style.display = "block";
-    }
-  </script>
-
+  document.getElementById("shortUrl").href = shortLink;
+  document.getElementById("shortUrl").textContent = shortLink;
+  document.getElementById("result").style.display = "block";
+}
+</script>
 </body>
 </html>
