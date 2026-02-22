@@ -47,10 +47,10 @@ public class UrlService {
 
     public String getLongUrl(String shortCode) {
 
-        String longUrl = cacheService.getShortCode(shortCode);
-        if (longUrl != null) {
-            return longUrl;
-        }
+        // String longUrl = cacheService.getShortCode(shortCode);
+        // if (longUrl != null) {
+        //     return longUrl;
+        // }
 
         Optional<UrlMapping> urlMapping = urlRepository.findById(shortCode);
         if (urlMapping.isEmpty()) {
