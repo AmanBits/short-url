@@ -22,8 +22,8 @@ public class UrlService {
     private UrlRepository urlRepository;
 
 
-    @Autowired
-    private CacheService cacheService;
+    // @Autowired
+    // private CacheService cacheService;
 
 
     public UrlMapping generateShortCode(ShortenRequestBody body){
@@ -41,7 +41,7 @@ public class UrlService {
         urlMapping.setExpireAt(body.getExpiry());
         urlMapping.setUserId((long) Math.random());
         // Save into cache memory
-        cacheService.setShortCode(shortCode,body.getLongUrl());
+        // cacheService.setShortCode(shortCode,body.getLongUrl());
         return urlRepository.save(urlMapping);
     }
 
@@ -58,7 +58,7 @@ public class UrlService {
         }
 
         String lu = urlMapping.get().getLongUrl();
-        cacheService.setShortCode(shortCode, lu);
+        // cacheService.setShortCode(shortCode, lu);
         return lu;
     }
 
