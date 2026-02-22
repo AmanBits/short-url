@@ -24,7 +24,7 @@ public class UrlController {
     @ResponseStatus(HttpStatus.CREATED)
     public ShortenResponseBody createShortUrl(@RequestBody ShortenRequestBody body){
         UrlMapping urlMapping = urlService.generateShortCode(body);
-        String shortUrl = "http://localhost:8080/api/shorten/"+urlMapping.getShortCode();
+        String shortUrl = "https://short-url-hprf.onrender.com/api/shorten/"+urlMapping.getShortCode();
         ShortenResponseBody shortenResponseBody = new ShortenResponseBody();
         shortenResponseBody.setShortUrl(shortUrl);
         return shortenResponseBody;
