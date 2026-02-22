@@ -109,8 +109,13 @@ async function shortenUrl() {
     alert("Please enter a URL");
     return;
   }
+  //   const res = await fetch("https://api.neurix.com/shorten", {
+  //   method: "POST",
+  //   headers: { "Content-Type": "application/json" },
+  //   body: JSON.stringify({ longUrl })
+  // });
 
-  const res = await fetch("https://api.neurix.com/shorten", {
+  const res = await fetch("http://localhost:8080/api/shorten", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ longUrl })
@@ -118,7 +123,9 @@ async function shortenUrl() {
 
   const data = await res.json();
 
-  const shortLink = "https://short.neurix.com/" + data.code;
+  // const shortLink = "https://short.neurix.com/" + data.code;
+
+    const shortLink = data.code;
 
   document.getElementById("shortUrl").href = shortLink;
   document.getElementById("shortUrl").textContent = shortLink;
