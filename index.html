@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Neurix URL Shortener</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: #020617;
+      padding: 30px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    p {
+      text-align: center;
+      font-size: 14px;
+      color: #94a3b8;
+      margin-bottom: 25px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: none;
+      background: #2563eb;
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .result {
+      margin-top: 20px;
+      text-align: center;
+      display: none;
+    }
+
+    .result a {
+      color: #38bdf8;
+      word-break: break-all;
+    }
+
+    footer {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 12px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>🔗 Neurix Short URL</h1>
+    <p>Paste your long URL to shorten it</p>
+
+    <input type="url" id="longUrl" placeholder="https://example.com/very/long/url" required />
+
+    <button onclick="shortenUrl()">Shorten URL</button>
+
+    <div class="result" id="result">
+      <p>Your short URL:</p>
+      <a href="#" id="shortUrl" target="_blank"></a>
+    </div>
+
+    <footer>
+      © 2026 Neurix
+    </footer>
+  </div>
+
+  <script>
+async function shortenUrl() {
+  const longUrl = document.getElementById("longUrl").value;
+  if (!longUrl) {
+    alert("Please enter a URL");
+    return;
+  }
+  //   const res = await fetch("https://api.neurix.com/shorten", {
+  //   method: "POST",
+  //   headers: { "Content-Type": "application/json" },
+  //   body: JSON.stringify({ longUrl })
+  // });
+
+  const res = await fetch("http://localhost:8080/api/shorten", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ longUrl })
+  });
+
+  const data = await res.json();
+
+  // const shortLink = "https://short.neurix.com/" + data.code;
+
+    const shortLink = data.code;
+
+  document.getElementById("shortUrl").href = shortLink;
+  document.getElementById("shortUrl").textContent = shortLink;
+  document.getElementById("result").style.display = "block";
+}
+</script>
+</body>
+</html>
