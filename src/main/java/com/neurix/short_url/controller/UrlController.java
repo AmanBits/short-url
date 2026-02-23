@@ -24,7 +24,7 @@ public class UrlController {
     @ResponseStatus(HttpStatus.CREATED)
     public ShortenResponseBody createShortUrl(@RequestBody ShortenRequestBody body){
         UrlMapping urlMapping = urlService.generateShortCode(body);
-        String shortUrl = "https://short-url-hprf.onrender.com/api/shorten/"+urlMapping.getShortCode();
+        String shortUrl = "https://short-url-5oo.pages.dev/"+urlMapping.getShortCode();
         ShortenResponseBody shortenResponseBody = new ShortenResponseBody();
         shortenResponseBody.setShortUrl(shortUrl);
         return shortenResponseBody;
@@ -32,14 +32,14 @@ public class UrlController {
 
 
 
-    @GetMapping("/{shortCode}")
-    public ResponseEntity<Void>  redirect(@PathVariable String shortCode){
-        String longUrl = urlService.getLongUrl(shortCode);
-        return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY) // 301
-                .header(HttpHeaders.LOCATION, longUrl)
-                .header(HttpHeaders.CACHE_CONTROL, "public, max-age=86400")
-                .build();
-    }
+    // @GetMapping("/{shortCode}")
+    // public ResponseEntity<Void>  redirect(@PathVariable String shortCode){
+    //     String longUrl = urlService.getLongUrl(shortCode);
+    //     return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY) // 301
+    //             .header(HttpHeaders.LOCATION, longUrl)
+    //             .header(HttpHeaders.CACHE_CONTROL, "public, max-age=86400")
+    //             .build();
+    // }
 
 
 
