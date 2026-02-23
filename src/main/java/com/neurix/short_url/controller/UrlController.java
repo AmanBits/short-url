@@ -38,6 +38,11 @@ public ResponseEntity<String> resolve(@PathVariable String shortCode) {
 }
 
 
+@GetMapping("/debug/all")
+public List<UrlMapping> debugAll() {
+    return urlService.findAll();
+}
+
     // @GetMapping("/{shortCode}")
     // public ResponseEntity<Void>  redirect(@PathVariable String shortCode){
     //     String longUrl = urlService.getLongUrl(shortCode);
