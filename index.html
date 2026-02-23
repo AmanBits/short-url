@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
+    /* ========== GLOBAL ========== */
     body {
       font-family: Arial, sans-serif;
       background: #0f172a;
@@ -15,27 +16,39 @@
       justify-content: center;
       height: 100vh;
       margin: 0;
+      overflow: hidden;
     }
 
+    /* ========== BACKGROUND CANVAS ========== */
+    #bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* ========== CARD ========== */
     .card {
-      background: #020617;
+      position: relative;
+      z-index: 1;
+      background: rgba(2, 6, 23, 0.85);
+      backdrop-filter: blur(6px);
       padding: 30px;
-      border-radius: 10px;
+      border-radius: 12px;
       width: 100%;
       max-width: 420px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     p {
       text-align: center;
       font-size: 14px;
       color: #94a3b8;
-      margin-bottom: 25px;
+      margin-bottom: 22px;
     }
 
     input {
@@ -48,6 +61,10 @@
       font-size: 14px;
     }
 
+    input:focus {
+      box-shadow: 0 0 0 2px rgba(56,189,248,0.6);
+    }
+
     button {
       width: 100%;
       padding: 12px;
@@ -57,21 +74,42 @@
       color: #fff;
       font-size: 15px;
       cursor: pointer;
+      transition: 0.2s ease;
     }
 
     button:hover {
       background: #1d4ed8;
+      box-shadow: 0 0 15px rgba(37,99,235,0.6);
     }
 
+    /* ========== RESULT ========== */
     .result {
       margin-top: 20px;
-      text-align: center;
       display: none;
+      text-align: center;
     }
 
     .result a {
       color: #38bdf8;
       word-break: break-all;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .copy-btn {
+      background: #16a34a;
+    }
+
+    .copy-btn:hover {
+      background: #15803d;
+      box-shadow: 0 0 12px rgba(22,163,74,0.6);
+    }
+
+    .copied {
+      font-size: 12px;
+      color: #22c55e;
+      margin-top: 8px;
+      display: none;
     }
 
     footer {
@@ -82,8 +120,13 @@
     }
   </style>
 </head>
+
 <body>
 
+  <!-- BACKGROUND -->
+  <canvas id="bg"></canvas>
+
+  <!-- CARD -->
   <div class="card">
     <h1>🔗 Neurix Short URL</h1>
     <p>Paste your long URL to shorten it</p>
@@ -93,8 +136,10 @@
     <button onclick="shortenUrl()">Shorten URL</button>
 
     <div class="result" id="result">
-      <p>Your short URL:</p>
+      <p>Your short URL</p>
       <a href="#" id="shortUrl" target="_blank"></a>
+      <button class="copy-btn" onclick="copyUrl()">Copy</button>
+      <div class="copied" id="copied">Copied to clipboard ✓</div>
     </div>
 
     <footer>
@@ -102,36 +147,104 @@
     </footer>
   </div>
 
+  <!-- ========== SHORTEN LOGIC ========== -->
   <script>
-async function shortenUrl() {
-  const longUrl = document.getElementById("longUrl").value;
-  if (!longUrl) {
-    alert("Please enter a URL");
-    return;
-  }
-  //   const res = await fetch("https://api.neurix.com/shorten", {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify({ longUrl })
-  // });
+    async function shortenUrl() {
+      const longUrl = document.getElementById("longUrl").value;
+      if (!longUrl) {
+        alert("Please enter a URL");
+        return;
+      }
 
-  const res = await fetch("https://short-url-hprf.onrender.com/api/shorten", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ longUrl })
-  });
+      const res = await fetch("https://short-url-hprf.onrender.com/api/shorten", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ longUrl })
+      });
 
-  const data = await res.json();
+      const data = await res.json();
 
-  // const shortLink = "https://short.neurix.com/" + data.code;
+      const shortLink = data.shortUrl;
 
+      const shortUrlEl = document.getElementById("shortUrl");
+      shortUrlEl.href = shortLink;
+      shortUrlEl.textContent = shortLink;
 
-    const shortLink = data.shortUrl;
+      document.getElementById("result").style.display = "block";
+      document.getElementById("copied").style.display = "none";
+    }
 
-  document.getElementById("shortUrl").href = shortLink;
-  document.getElementById("shortUrl").textContent = shortLink;
-  document.getElementById("result").style.display = "block";
-}
-</script>
+    function copyUrl() {
+      const text = document.getElementById("shortUrl").textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        document.getElementById("copied").style.display = "block";
+      });
+    }
+  </script>
+
+  <!-- ========== BACKGROUND ANIMATION ========== -->
+  <script>
+    const canvas = document.getElementById("bg");
+    const ctx = canvas.getContext("2d");
+
+    let w, h;
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    const DOTS = 80;
+    const MAX_DIST = 120;
+    const dots = [];
+
+    for (let i = 0; i < DOTS; i++) {
+      dots.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4
+      });
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, w, h);
+
+      for (let i = 0; i < dots.length; i++) {
+        const d = dots[i];
+        d.x += d.vx;
+        d.y += d.vy;
+
+        if (d.x < 0 || d.x > w) d.vx *= -1;
+        if (d.y < 0 || d.y > h) d.vy *= -1;
+
+        ctx.fillStyle = "#38bdf8";
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, 1.6, 0, Math.PI * 2);
+        ctx.fill();
+
+        for (let j = i + 1; j < dots.length; j++) {
+          const d2 = dots[j];
+          const dx = d.x - d2.x;
+          const dy = d.y - d2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < MAX_DIST) {
+            ctx.strokeStyle = `rgba(56,189,248,${1 - dist / MAX_DIST})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(d.x, d.y);
+            ctx.lineTo(d2.x, d2.y);
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+
 </body>
 </html>
