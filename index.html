@@ -125,10 +125,8 @@ async function shortenUrl() {
 
   // const shortLink = "https://short.neurix.com/" + data.code;
 
-  alert(data);
-    console.log(data.code);
-  console.log(data);
-    const shortLink = data.code;
+
+    const shortLink = data.shortUrl;
 
   document.getElementById("shortUrl").href = shortLink;
   document.getElementById("shortUrl").textContent = shortLink;
