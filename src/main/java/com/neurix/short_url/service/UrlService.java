@@ -7,6 +7,7 @@ import com.neurix.short_url.repository.UrlRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 import java.util.Optional;
 
@@ -43,6 +44,10 @@ public class UrlService {
         // Save into cache memory
         // cacheService.setShortCode(shortCode,body.getLongUrl());
         return urlRepository.save(urlMapping);
+    }
+
+    public List<UrlMapping> findAll(){
+        return urlRepository.findAll();
     }
 
     public String getLongUrl(String shortCode) {
