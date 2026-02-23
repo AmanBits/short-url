@@ -1,11 +1,11 @@
 package com.neurix.short_url.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotationConfiguration;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@org.springframework.context.annotation.Configuration
+@Configuration
 public class CorsConfig {
 
     @Bean
@@ -13,8 +13,6 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-
-                // ✅ Allow ONLY frontend page to call API
                 registry.addMapping("/api/**")
                         .allowedOrigins("https://short-url-5oo.pages.dev")
                         .allowedMethods("GET", "POST", "OPTIONS")
