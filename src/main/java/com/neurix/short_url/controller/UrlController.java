@@ -25,7 +25,7 @@ public class UrlController {
     @ResponseStatus(HttpStatus.CREATED)
     public ShortenResponseBody createShortUrl(@RequestBody ShortenRequestBody body){
         UrlMapping urlMapping = urlService.generateShortCode(body);
-        String shortUrl = "https://shorturlworker.generalk159.workers.dev/"+urlMapping.getShortCode();
+        String shortUrl = "https://go.nx-short.workers.dev/"+urlMapping.getShortCode();
         ShortenResponseBody shortenResponseBody = new ShortenResponseBody();
         shortenResponseBody.setShortUrl(shortUrl);
         return shortenResponseBody;
