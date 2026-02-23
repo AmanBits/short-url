@@ -31,6 +31,12 @@ public class UrlController {
     }
 
 
+@GetMapping("/resolve/{shortCode}")
+public ResponseEntity<String> resolve(@PathVariable String shortCode) {
+    String longUrl = urlService.getLongUrl(shortCode);
+    return ResponseEntity.ok(longUrl);
+}
+
 
     // @GetMapping("/{shortCode}")
     // public ResponseEntity<Void>  redirect(@PathVariable String shortCode){
