@@ -38,7 +38,6 @@ public class UrlController {
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY) // 301
                 .header(HttpHeaders.LOCATION, longUrl)
                 .header(HttpHeaders.CACHE_CONTROL, "public, max-age=86400")
-                .header(HttpHeaders.VARY, "")
                 .build();
     }
 
