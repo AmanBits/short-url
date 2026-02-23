@@ -1,6 +1,5 @@
 package com.neurix.short_url.config;
 
-import io.lettuce.core.resource.ClientResources;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisPassword;
@@ -11,7 +10,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 import java.net.URI;
-import java.time.Duration;
 
 @Configuration
 public class RedisConfig {
@@ -37,9 +35,7 @@ public class RedisConfig {
 
         LettuceClientConfiguration clientConfig =
                 LettuceClientConfiguration.builder()
-                        .useSsl()                      // 🔑 REQUIRED for Upstash
-                        .commandTimeout(Duration.ofSeconds(5))
-                        .shutdownTimeout(Duration.ofSeconds(2))
+                        .useSsl()   // ✅ REQUIRED for Upstash
                         .build();
 
         return new LettuceConnectionFactory(config, clientConfig);
